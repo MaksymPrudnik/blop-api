@@ -13,6 +13,10 @@ const createPost = require('./controllers/posts/createPost');
 const modifyPost = require('./controllers/posts/modifyPost');
 const deletePost = require('./controllers/posts/deletePost');
 const listPosts = require('./controllers/posts/listPosts');
+// User profille
+const getUser = require('./controllers/user/getUser');
+const updateUser = require('./controllers/user/updateUser');
+const deleteUser = require('./controllers/user/deleteUser');
 
 const app = express();
 
@@ -37,6 +41,10 @@ app.post('/create-post', (req, res) => createPost.handleCreatePost(req, res, jwt
 app.post('/modify-post', (req, res) => modifyPost.handleModifyPost(req, res, jwt));
 app.post('/delete-post', (req, res) => deletePost.handleDeletePost(req, res, jwt));
 app.get('/posts', (req, res) => listPosts.handleListPosts(req, res, jwt));
+// User profile
+app.get('/user/:username', (req, res) => getUser.handleGetUser(req, res));
+app.post('/update/:username', (req, res) => updateUser.handleUpdateUser(req, res, jwt));
+app.post('/delete/:username', (req, res) => deleteUser.handleDeleteUser(req, res, jwt));
 // Friends
 app.post('/send-friend-request', (req, res) => friends.sendRequest(req, res, mongoose));
 app.post('/manage-friend-request', (req, res) => friends.manageRequest(req, res, mongoose));
