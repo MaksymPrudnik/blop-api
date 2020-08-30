@@ -1,20 +1,20 @@
-const signToken = (email, jwt) => {
-    const jwtPayload = { email };
+const signToken = (username, jwt) => {
+    const jwtPayload = { username };
     return jwt.sign(jwtPayload, process.env.JWT_SECRET || 'JWT_SECRET');
 }
 
-const setToken = (token, email, redisClient) => {
-    return Promise.resolve(redisClient.set(token, email));
+const setToken = (token, username, redisClient) => {
+    return Promise.resolve(redisClient.set(token, username));
 }
 
-const createSession = (email, redisClient, jwt) => {
-    if (email) {
-        const token = signToken(email, jwt);
-        return setToken(token, email, redisClient)
+const createSession = (username, redisClient, jwt) => {
+    if (username) {
+        const token = signToken(username, jwt);
+        return setToken(token, username, redisClient)
             .then(() => {
                 return {
                     'success': true,
-                    email,
+                    username,
                     token
                 }
             })

@@ -8,7 +8,6 @@ const handleSignin = (req, bcrypt) => {
     }
     return LoginModel.find()
         .where('email').equals(email)
-        .select('email hash')
         .exec()
         .then(user => { // returns array of found users | empty array if no users found
             if (!user.length) {
@@ -23,22 +22,22 @@ const handleSignin = (req, bcrypt) => {
         })
 }
 
-const getAuthTokenEmail = (req, res, redisClient) => {
+const getAuthTokenUsername = (req, res, redisClient) => {
     const { authorization } = req.headers;
-    return redisClient.get(authorization, (err, email) => {
-        if (err || !email ) {
+    return redisClient.get(authorization, (err, username) => {
+        if (err || !username ) {
             return res.status(400).json('Unauthorized');
         } else {
-            return res.json({ email });
+            return res.json({ username });
         }
     })
 }
 
 const signinAuth = (req, res, bcrypt, jwt, redisClient) => {
     const { authorization } = req.headers;
-    return authorization ? getAuthTokenEmail(req, res, redisClient) : handleSignin(req, bcrypt)
+    return authorization ? getAuthTokenUsername(req, res, redisClient) : handleSignin(req, bcrypt)
         .then(data => {
-            return data.email ? createSession(data.email, redisClient, jwt) : Promise.reject(data)
+            return data.username ? createSession(data.username, redisClient, jwt) : Promise.reject(data)
         })
         .then(session => {
             return res.json(session)})
