@@ -7,7 +7,7 @@ const handleCreatePost = (req, res, jwt) => {
     if (!header || !body) {
         res.status(400).json("Wrong submission");
     }
-    const username = jwt.verify(authorization, process.env.JWT_SECRET || 'JWT_SECRET').username;
+    const username = jwt.verify(authorization, process.env.JWT_SECRET).username;
     const newPost = new PostModel({
         createdBy: username,
         header,

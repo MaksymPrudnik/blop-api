@@ -3,7 +3,7 @@ const UserModel = require('../../models/user.model').UserModel;
 const handleUpdateUser = (req, res, jwt) => {
     const { username } = req.params;
     const { authorization } = req.headers;
-    const userToken = jwt.verify(authorization, process.env.JWT_SECRET || 'JWT_SECRET').username;
+    const userToken = jwt.verify(authorization, process.env.JWT_SECRET).username;
     if (username === userToken) {
         const {firstname, lastname, avatar } = req.body;
         return UserModel.findOne({ username })

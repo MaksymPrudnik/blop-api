@@ -7,7 +7,7 @@ const handleDeletePost = (req, res, jwt) => {
     if (!id) {
         return res.status(400).json('Wrong submission');
     };
-    const username = jwt.verify(authorization, process.env.JWT_SECRET || 'JWT_SECRET').username;
+    const username = jwt.verify(authorization, process.env.JWT_SECRET).username;
     return UserModel.findOne({ username }).then(user => {
         user.posts.pull(id);
         return user.save()

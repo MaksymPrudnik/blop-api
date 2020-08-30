@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
-const commentSchema = new mongoose.Schema({
-    createdBy: String,
-    body: String
-}, {timestamps: true})
+const { commentSchema } = require('./comment.model');
 
 const postSchema = new mongoose.Schema({
     createdBy: String,

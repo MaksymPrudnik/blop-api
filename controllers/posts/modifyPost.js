@@ -7,7 +7,7 @@ const handleModifyPost = (req, res, jwt) => {
     if (!id || !header || !body) {
         return res.status(400).json('Wrong submission');
     }
-    const username = jwt.verify(authorization, process.env.JWT_SECRET || 'JWT_SECRET').username;
+    const username = jwt.verify(authorization, process.env.JWT_SECRET).username;
     return UserModel.findOne({ username }).then(user => {
         user.posts.id(id).set({ header, body });
         return user.save().then(() => {

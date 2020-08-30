@@ -1,6 +1,6 @@
 const signToken = (username, jwt) => {
     const jwtPayload = { username };
-    return jwt.sign(jwtPayload, process.env.JWT_SECRET || 'JWT_SECRET');
+    return jwt.sign(jwtPayload, process.env.JWT_SECRET);
 }
 
 const setToken = (token, username, redisClient) => {

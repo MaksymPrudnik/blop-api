@@ -7,7 +7,7 @@ const acceptFriendRequest = (req, res, jwt) => {
     if (!from) {
         res.status(400).json('Wrong request');
     }
-    const to = jwt.verify(authorization, process.env.JWT_SECRET || 'JWT_SECRET').username;
+    const to = jwt.verify(authorization, process.env.JWT_SECRET).username;
     return manageRequests(from, to, 'remove')
     .then(result => {
         if (result.length !== 2) {
