@@ -17,6 +17,11 @@ const listPosts = require('./controllers/posts/listPosts');
 const getUser = require('./controllers/user/getUser');
 const updateUser = require('./controllers/user/updateUser');
 const deleteUser = require('./controllers/user/deleteUser');
+// Friends
+const sendRequest = require('./controllers/friends/sendRequest');
+const acceptRequest = require('./controllers/friends/acceptRequest');
+const rejectRequest = require('./controllers/friends/rejectRequest');
+const removeFriend = require('./controllers/friends/removeFriend');
 
 const app = express();
 
@@ -46,9 +51,10 @@ app.get('/user/:username', (req, res) => getUser.handleGetUser(req, res));
 app.post('/update/:username', (req, res) => updateUser.handleUpdateUser(req, res, jwt));
 app.post('/delete/:username', (req, res) => deleteUser.handleDeleteUser(req, res, jwt));
 // Friends
-app.post('/send-friend-request', (req, res) => friends.sendRequest(req, res, mongoose));
-app.post('/manage-friend-request', (req, res) => friends.manageRequest(req, res, mongoose));
-app.post('/remove-friend', (req, res) => friends.removeFriend(req, res, mongoose));
+app.post('/friend-request/:to', (req, res) => sendRequest.sendFriendRequest(req, res, jwt));
+app.post('/accept-request/:from', (req, res) => acceptRequest.acceptFriendRequest(req, res, jwt));
+app.post('/reject-request/:from', (req, res) => rejectRequest.rejectFriendRequest(req, res, jwt));
+app.post('/friend-remove/:username', (req, res) => removeFriend.removeFriend(req, res, jwt));
 
 app.listen(3000, () => {
     console.log('app is running on port 3000');

@@ -9,10 +9,12 @@ const addUserToDB = (req, res, bcrypt) => {
         return Promise.reject('Incorrect form submission');
     }
     const newUser = new UserModel({ username, email });
-    newUser.save();
-    const hash = bcrypt.hashSync(password);
-    const newLogin = new LoginModel({ username, email, hash });
-    return newLogin.save();
+    return newUser.save()
+    .then(() => {
+        const hash = bcrypt.hashSync(password);
+        const newLogin = new LoginModel({ username, email, hash });
+        return newLogin.save();    
+    })
 }
 
 const handleRegister = (req, res, bcrypt, jwt, redisClient) => {
