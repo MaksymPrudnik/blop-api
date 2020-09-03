@@ -15,9 +15,13 @@ const handleCreatePost = (req, res, jwt) => {
     });
     return UserModel.findOne({ username }).then(user => {
         user.posts.push(newPost);
-        return user.save().then((userUpdated) => { // update user
-            return newPost.save().then(post => res.json(post)); // create post
-        });
+        return user.save()
+        .then((userUpdated) => { // update user
+            return newPost.save()
+            .then(post => res.json(post))
+            .catch(err => res.status(400).json(err)); // create post
+        })
+        .catch(err => res.status(400).json(err));
     })
 }
 

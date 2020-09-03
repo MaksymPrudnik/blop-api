@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const redis = require('redis');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 // Authentication
 const register = require('./controllers/authentication/register');
@@ -17,6 +18,7 @@ const deletePost = require('./controllers/posts/deletePost');
 const listPosts = require('./controllers/posts/listPosts');
 // User profille
 const getUser = require('./controllers/user/getUser');
+const getUserList = require('./controllers/user/getUserList');
 const updateUser = require('./controllers/user/updateUser');
 const deleteUser = require('./controllers/user/deleteUser');
 // Friends
@@ -33,6 +35,7 @@ const app = express();
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+app.use(cors());
 
 // setup MongoDB
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true })
@@ -51,9 +54,10 @@ app.post('/signout', (req, res, next) => auth.requireAuth(req, res, redisClient,
 app.post('/create-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => createPost.handleCreatePost(req, res, jwt));
 app.post('/modify-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => modifyPost.handleModifyPost(req, res, jwt));
 app.post('/delete-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deletePost.handleDeletePost(req, res, jwt));
-app.get('/posts', (req, res) => listPosts.handleListPosts(req, res, jwt));
+app.get('/posts/:from', (req, res) => listPosts.handleListPosts(req, res, jwt));
 // User profile
 app.get('/user/:username', (req, res) => getUser.handleGetUser(req, res));
+app.post('/user-list', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => getUserList.handleGetUserList(req, res, jwt));
 app.post('/update/:username', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => updateUser.handleUpdateUser(req, res, jwt));
 app.post('/delete/:username', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteUser.handleDeleteUser(req, res, jwt));
 // Friends
@@ -66,6 +70,8 @@ app.post('/add-comment/:post', (req, res, next) => auth.requireAuth(req, res, re
 app.post('/edit-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => editComment.handleEditComment(req, res, jwt));
 app.post('/delete-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteComment.handleDeleteComment(req, res, jwt));
 
-app.listen(3000, () => {
-    console.log('app is running on port 3000');
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`App is running on port ${PORT}`);
 })
