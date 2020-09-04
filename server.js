@@ -25,6 +25,7 @@ const deleteUser = require('./controllers/user/deleteUser');
 const sendRequest = require('./controllers/friends/sendRequest');
 const acceptRequest = require('./controllers/friends/acceptRequest');
 const rejectRequest = require('./controllers/friends/rejectRequest');
+const cancelRequest = require('./controllers/friends/cancelRequest');
 const removeFriend = require('./controllers/friends/removeFriend');
 // Comments
 const addComment = require('./controllers/comment/addComment');
@@ -64,6 +65,7 @@ app.post('/delete/:username', (req, res, next) => auth.requireAuth(req, res, red
 app.post('/friend-request/:to', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => sendRequest.sendFriendRequest(req, res, jwt));
 app.post('/accept-request/:from', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => acceptRequest.acceptFriendRequest(req, res, jwt));
 app.post('/reject-request/:from', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => rejectRequest.rejectFriendRequest(req, res, jwt));
+app.post('/cancel-request/:to', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => cancelRequest.cancelFriendRequest(req, res, jwt));
 app.post('/friend-remove/:username', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => removeFriend.removeFriend(req, res, jwt));
 // Comments
 app.post('/add-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => addComment.handleAddComment(req, res, jwt));
