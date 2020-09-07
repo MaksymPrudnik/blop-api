@@ -54,7 +54,7 @@ app.post('/signout', (req, res, next) => auth.requireAuth(req, res, redisClient,
 // Posts
 app.post('/create-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => createPost.handleCreatePost(req, res, jwt));
 app.post('/modify-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => modifyPost.handleModifyPost(req, res, jwt));
-app.post('/delete-post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deletePost.handleDeletePost(req, res, jwt));
+app.delete('/delete-post/:id', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deletePost.handleDeletePost(req, res, jwt));
 app.get('/posts/:from', (req, res) => listPosts.handleListPosts(req, res, jwt));
 // User profile
 app.get('/user/:username', (req, res) => getUser.handleGetUser(req, res));

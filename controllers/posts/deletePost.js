@@ -3,7 +3,7 @@ const PostModel = require('../../models/post.model').PostModel;
 
 const handleDeletePost = (req, res, jwt) => {
     const { authorization } = req.headers;
-    const { id } = req.body;
+    const { id } = req.params;
     if (!id) {
         return res.status(400).json('Wrong submission');
     };

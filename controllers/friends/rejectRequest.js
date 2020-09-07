@@ -8,7 +8,7 @@ const rejectFriendRequest = (req, res, jwt) => {
     }
     const to = jwt.verify(authorization, process.env.JWT_SECRET).username;
     return manageRequests(from, to, 'remove')
-    .this(result => res.json(result))
+    .then(result => res.json(result))
     .catch(err => res.status(400).json({err}));
 }
 

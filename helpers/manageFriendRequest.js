@@ -44,6 +44,7 @@ const manageRequests = (from, to, action) => {
                 }
             }));
         } else if (action === 'remove') { //removing requests
+            console.log('removing request')
             return Promise.all(users.map(user => {
                 if (user.username === from) {
                     return removeRequest(user, user.friends.outcommingRequests, to);

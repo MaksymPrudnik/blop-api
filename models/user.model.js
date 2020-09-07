@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     username: {type: String, unique: true, required: true},
     email: {type: String, unique: true, required: true},
     name: { first: String, last: String },
-    avatar: {type: String, default: 'http://tachyons.io/img/logo.jpg'},
+    avatar: {type: String, default: 'https://i.ytimg.com/vi/p5Vsg1CrhrI/hqdefault.jpg'},
     posts: [postSchema],
     friends: {
         existing: [String],
