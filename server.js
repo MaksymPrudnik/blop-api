@@ -70,7 +70,7 @@ app.post('/friend-remove/:username', (req, res, next) => auth.requireAuth(req, r
 // Comments
 app.post('/add-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => addComment.handleAddComment(req, res, jwt));
 app.post('/edit-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => editComment.handleEditComment(req, res, jwt));
-app.post('/delete-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteComment.handleDeleteComment(req, res, jwt));
+app.delete('/delete-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteComment.handleDeleteComment(req, res, jwt));
 
 
 const PORT = process.env.PORT || 3000;
