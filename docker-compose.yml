@@ -12,6 +12,8 @@ services:
             MONGODB_URL: mongodb://mongo:27017
             REDIS_URL: redis://redis:6379
             JWT_SECRET: 'jwt_secret_string'
+            VAPID_KEY_PRIVATE: 'r-Q7zHo7n7BMjtVKHlJA8ZbKSgS4yqLx98Ssf5Dkz7A'
+            VAPID_KEY_PUBLIC: 'BDfh6c3xPkfhC4UzOJ-w09uXhg1Ueg-cbEMc09kjGOuDQPRS-llejuenO_WUnn4_wDeSbky-38FUs_Rs8Alh48g'
         ports: 
             - '3000:3000'
         volumes: 

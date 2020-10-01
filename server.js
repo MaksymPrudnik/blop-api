@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const redis = require('redis');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const webpush = require('web-push')
 
 // Authentication
 const register = require('./controllers/authentication/register');
@@ -31,12 +32,17 @@ const removeFriend = require('./controllers/friends/removeFriend');
 const addComment = require('./controllers/comment/addComment');
 const editComment = require('./controllers/comment/editComment');
 const deleteComment = require('./controllers/comment/deleteComment');
+// Notifications
+const addSubscription = require('./controllers/notification/addSubscription');
 
 const app = express();
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
+
+// setup web-push
+webpush.setVapidDetails('mailto:maxprudnik@gmail.com', process.env.VAPID_KEY_PUBLIC, process.env.VAPID_KEY_PRIVATE)
 
 // setup MongoDB
 mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true })
@@ -62,7 +68,7 @@ app.post('/user-list', (req, res, next) => auth.requireAuth(req, res, redisClien
 app.post('/update/:username', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => updateUser.handleUpdateUser(req, res, jwt));
 app.post('/delete/:username', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteUser.handleDeleteUser(req, res, jwt));
 // Friends
-app.post('/friend-request/:to', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => sendRequest.sendFriendRequest(req, res, jwt));
+app.post('/friend-request/:to', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => sendRequest.sendFriendRequest(req, res, jwt, webpush));
 app.post('/accept-request/:from', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => acceptRequest.acceptFriendRequest(req, res, jwt));
 app.post('/reject-request/:from', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => rejectRequest.rejectFriendRequest(req, res, jwt));
 app.post('/cancel-request/:to', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => cancelRequest.cancelFriendRequest(req, res, jwt));
@@ -71,6 +77,10 @@ app.post('/friend-remove/:username', (req, res, next) => auth.requireAuth(req, r
 app.post('/add-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => addComment.handleAddComment(req, res, jwt));
 app.post('/edit-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => editComment.handleEditComment(req, res, jwt));
 app.delete('/delete-comment/:post', (req, res, next) => auth.requireAuth(req, res, redisClient, next), (req, res) => deleteComment.handleDeleteComment(req, res, jwt));
+// Notifications
+app.post('/add-subscription', (req, res, next) => auth.requireAuth(req, res, redisClient, next),
+(req, res) => addSubscription.handleAddSubscription(req, res, jwt))
+
 
 
 const PORT = process.env.PORT || 3000;

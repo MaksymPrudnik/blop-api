@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
         existing: [String],
         outcommingRequests: [String],
         incommingRequests: [String]
+    },
+    notifications: {
+        allowed: {type: Boolean, default: false},
+        asked: {type: Boolean, default: false},
+        subscription: {type: Object, default: null}
     }
 }, { timestamps: true});
 
